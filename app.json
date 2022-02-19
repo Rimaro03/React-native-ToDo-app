@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "todoList",
+    "name": "Yass Todo app",
     "slug": "todoList",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,6 +20,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package":"com.yasscodes.todoapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
