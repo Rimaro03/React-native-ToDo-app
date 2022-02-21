@@ -1,20 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import Task from './components/Task';
-
 export default function App() {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   const [taskItemsDone, setTaskItemsDone] = useState([]);
 
   const handleAddTask = () => {
-    if(task!==null && task!==" " && task!==""){
-
-   
-    Keyboard.dismiss();
-    setTaskItems([...taskItems, task])
-    setTask(null);
-  }
+    if (task !== null && task !== " " && task !== "") {
+      Keyboard.dismiss();
+      storeData(task);
+      console.log(getData())
+      setTaskItems([...taskItems, task])
+      setTask(null);
+    }
   }
 
   const removeTask = (index) => {
@@ -25,10 +24,30 @@ export default function App() {
 
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];
-    setTaskItemsDone([...taskItemsDone,itemsCopy[index]]);
+    setTaskItemsDone([...taskItemsDone, itemsCopy[index]]);
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy)
   }
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('tasks')
+      if (value !== null) {
+        // value previously stored
+      }
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('@tasks', value)
+    } catch (e) {
+      // saving error
+    }
+  }
+
 
   return (
     <View style={styles.container}>
@@ -36,47 +55,47 @@ export default function App() {
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          paddingBottom:'30%'
+          paddingBottom: '30%'
         }}
         keyboardShouldPersistTaps='handled'
       >
 
-      {/* Today's Tasks */}
-      <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Today's tasks</Text>
-        <View style={styles.items}>
-          {/* This is where the tasks will go! */}
-          {
-            taskItems.map((item, index) => {
-              return (
-                <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
-                  <Task text={item} /> 
-                </TouchableOpacity>
-              )
-            })
-          }
+        {/* Today's Tasks */}
+        <View style={styles.tasksWrapper}>
+          <Text style={styles.sectionTitle}>Today's tasks</Text>
+          <View style={styles.items}>
+            {/* This is where the tasks will go! */}
+            {
+              taskItems.map((item, index) => {
+                return (
+                  <TouchableOpacity key={index} onPress={() => completeTask(index)}>
+                    <Task text={item} />
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </View>
+          <View style={styles.items}>
+            <Text style={styles.sectionTitle}>Task's done</Text>
+            {/* This is where the tasks will go! */}
+            {
+              taskItemsDone.map((item, index) => {
+                return (
+                  <TouchableOpacity key={index} onPress={() => removeTask(index)}>
+                    <Task text={item} done={true} />
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </View>
+
         </View>
-        <View style={styles.items}>
-        <Text style={styles.sectionTitle}>Task's done</Text>
-          {/* This is where the tasks will go! */}
-          {
-            taskItemsDone.map((item, index) => {
-              return (
-                <TouchableOpacity key={index}   onPress={() => removeTask(index)}>
-                  <Task text={item} done={true} /> 
-                </TouchableOpacity>
-              )
-            })
-          }
-        </View>
-        
-      </View>
-        
+
       </ScrollView>
 
       {/* Write a task */}
       {/* Uses a keyboard avoiding view which ensures the keyboard does not cover the items on screen */}
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.writeTaskWrapper}
       >
@@ -87,7 +106,7 @@ export default function App() {
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-      
+
     </View>
   );
 }
@@ -124,7 +143,7 @@ const styles = StyleSheet.create({
     borderColor: '#C0C0C0',
     borderWidth: 1,
     width: 250,
-    textAlign:'center'
+    textAlign: 'center'
   },
   addWrapper: {
     width: 60,
@@ -137,11 +156,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   addText: {},
-  itemsDone:{
-    
+  itemsDone: {
+
     backgroundColor: 'yellow',
   },
-  itemDone:{
+  itemDone: {
 
   }
 });
