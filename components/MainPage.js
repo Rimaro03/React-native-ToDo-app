@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import Task from './Task';
 
-export default function MainPage() {
+export const MainPage = () => {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   const [taskItemsDone, setTaskItemsDone] = useState([]);

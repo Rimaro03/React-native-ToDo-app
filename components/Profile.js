@@ -1,3 +1,5 @@
+import {Button} from 'react-native';
+
 export const Profile = ({ navigation }) => {
     return (
         <Button

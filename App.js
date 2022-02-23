@@ -11,7 +11,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={MainPage} />
-        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="Calendar" component={Profile} />
       </Tab.Navigator>
     </NavigationContainer>
   );
