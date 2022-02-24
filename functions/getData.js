@@ -1,16 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const getData = async () => {
+export const getData = async () => {
     try {
         const value = await AsyncStorage.getItem('@tasks')
         if (value !== null) {
-            // value previously stored
+            return value;
         }
     } catch (e) {
-        // error reading value
+        console.log(`ERROR GETTING DATA:\n${e}`);
     }
 }
-
-
-export default getData;

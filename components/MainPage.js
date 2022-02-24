@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import Task from './Task';
+import { getData } from '../functions/getData';
+import { storeData } from '../functions/writeDatas';
 
 export const MainPage = () => {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   const [taskItemsDone, setTaskItemsDone] = useState([]);
 
+  useEffect(() => {
+    getData().then(data => {
+      setTaskItems(data.split(','));
+    });
+  }, []);
+
   const handleAddTask = () => {
     if (task !== null && task !== " " && task !== "") {
       Keyboard.dismiss();
-      //storeData(task);
-      //console.log(getData())
+      console.log(taskItems);
       setTaskItems([...taskItems, task])
+      console.log(taskItems);
       setTask(null);
+      
+      storeData(taskItems.toString());
     }
   }
 
@@ -28,9 +38,11 @@ export const MainPage = () => {
     setTaskItemsDone([...taskItemsDone, itemsCopy[index]]);
     itemsCopy.splice(index, 1);
     setTaskItems(itemsCopy)
+
+    storeData(itemsCopy.toString());
   }
 
-  const getData = async () => {
+  /*const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('tasks')
       if (value !== null) {
@@ -40,14 +52,14 @@ export const MainPage = () => {
       // error reading value
     }
   }
-
+ 
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('@tasks', value)
     } catch (e) {
       // saving error
     }
-  }
+  }*/
 
 
   return (
